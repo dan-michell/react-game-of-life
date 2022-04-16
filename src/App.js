@@ -13,7 +13,11 @@ function App() {
     }
     return grid;
   });
-  const [running, setRunning] = useState(true);
+  const [running, setRunning] = useState(false);
+
+  useEffect(() => {
+    simulateGame();
+  }, [grid, running]);
 
   function addCell(e) {
     const newGrid = [...grid];
@@ -26,12 +30,7 @@ function App() {
     setGrid(newGrid);
   }
 
-  function timer(ms) {
-    return new Promise((res) => setTimeout(res, ms));
-  }
-
   async function simulateGame() {
-    setRunning(!running);
     const directions = [
       [-1, -1],
       [0, -1],
@@ -43,9 +42,8 @@ function App() {
       [1, 1],
     ];
 
-    while (running) {
+    if (running) {
       let newCellGrid = JSON.parse(JSON.stringify(grid));
-      console.log(running);
       for (let i = 0; i < grid.length; i++) {
         for (let j = 0; j < grid[i].length; j++) {
           let numOfAlive = 0;
@@ -68,11 +66,13 @@ function App() {
           }
         }
       }
-
-      await timer(1000);
-      const newGrid = [...newCellGrid];
-      setGrid(newGrid);
+      await timer(250);
+      setGrid(newCellGrid);
     }
+  }
+
+  function timer(ms) {
+    return new Promise((res) => setTimeout(res, ms));
   }
 
   return (
@@ -83,10 +83,10 @@ function App() {
       <button
         className="start-button"
         onClick={(e) => {
-          simulateGame();
+          setRunning(!running);
         }}
       >
-        {!running ? "Stop" : "Run"}
+        {running ? "Stop" : "Run"}
       </button>
       <div className="grid-wrapper">
         {grid.map((row, y) =>
