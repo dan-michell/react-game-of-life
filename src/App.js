@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 function App() {
   const [grid, setGrid] = useState(() => {
     const grid = [];
-    for (let i = 0; i < 50; i++) {
+    for (let i = 0; i < 30; i++) {
       const row = [];
       for (let j = 0; j < 50; j++) {
         row.push(0);
